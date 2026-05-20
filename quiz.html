@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuis Ekonomi Kreatif — PIPAS | Kelompok 1</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+
+<!-- Identity Strip -->
+<div class="identity-strip">
+  <strong>Kelompok 1</strong>
+  <span class="identity-sep">·</span>
+  SMKS Wikrama Bogor
+  <span class="identity-sep">·</span>
+  Kelas PPLG X-5
+  <span class="identity-sep">·</span>
+  Mata Pelajaran PIPAS
+</div>
+
+<!-- Header -->
+<header>
+  <div class="logo"><div class="logo-dot"></div>EkoKreatif</div>
+  <div class="header-right">
+    <span class="header-group">Kelompok 1</span>
+    <span class="header-badge">PIPAS</span>
+  </div>
+</header>
+
+<!-- Landing -->
+<section class="hero" id="landing">
+  <div class="hero-tag">Kuis Interaktif</div>
+  <h1>Uji Pengetahuan<br><em>Ekonomi Kreatif</em>mu</h1>
+  <p class="hero-desc">Seberapa dalam kamu memahami ekonomi kreatif Indonesia? Jawab 25 soal pilihan ganda dan ukur pemahamanmu — jawaban diacak setiap sesi!</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">25</div><div class="stat-lbl">Soal</div></div>
+    <div class="stat"><div class="stat-num">17</div><div class="stat-lbl">Subsektor</div></div>
+    <div class="stat"><div class="stat-num">~10</div><div class="stat-lbl">Menit</div></div>
+  </div>
+  <button class="btn-start" onclick="startQuiz()">
+    Mulai Kuis
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </button>
+</section>
+
+<div class="topics" id="topic-chips">
+  <div class="topics-title">Materi yang diuji</div>
+  <div class="chips">
+    <span class="chip"><span class="chip-dot"></span>Definisi Ekraf</span>
+    <span class="chip"><span class="chip-dot"></span>Sejarah & Tokoh</span>
+    <span class="chip"><span class="chip-dot"></span>17 Subsektor</span>
+    <span class="chip"><span class="chip-dot"></span>Lembaga Pemerintah</span>
+    <span class="chip"><span class="chip-dot"></span>HKI & Paten</span>
+    <span class="chip"><span class="chip-dot"></span>Triple Helix</span>
+    <span class="chip"><span class="chip-dot"></span>Produk Kreatif Indonesia</span>
+    <span class="chip"><span class="chip-dot"></span>Digitalisasi Ekraf</span>
+    <span class="chip"><span class="chip-dot"></span>Ekraf Global</span>
+  </div>
+</div>
+
+<div class="divider" id="landing-divider"><hr></div>
+
+<!-- Quiz -->
+<section class="quiz-section" id="quiz-section">
+  <div class="prog-row">
+    <span class="prog-info" id="prog-info">Soal 1 dari 25</span>
+    <span class="prog-score" id="prog-score">Skor: 0</span>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:4%"></div></div>
+  <div class="q-card">
+    <div class="q-num" id="q-num">Soal 01 / 25</div>
+    <div class="q-text" id="q-text"></div>
+  </div>
+  <div class="options" id="options"></div>
+  <div class="feedback" id="feedback">
+    <span class="feedback-icon" id="fb-icon"></span>
+    <span id="fb-text"></span>
+  </div>
+  <div class="nav-row">
+    <button class="btn-next" id="btn-next" onclick="nextQ()">
+      Lanjut
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- Result -->
+<section class="result-section" id="result-section">
+  <div class="result-card">
+    <div class="res-emoji" id="res-emoji">🎉</div>
+    <div class="res-fraction" id="res-fraction">0/25</div>
+    <div class="res-max">soal dijawab benar</div>
+    <div class="res-predikat" id="res-predikat">Luar Biasa!</div>
+    <div class="res-desc" id="res-desc"></div>
+    <div class="score-bar-wrap">
+      <div class="score-bar-bg"><div class="score-bar-fill" id="score-bar" style="width:0%"></div></div>
+      <div class="score-bar-label"><span>0%</span><span id="bar-pct">0%</span></div>
+    </div>
+    <div class="res-actions">
+      <button class="btn-retry" onclick="resetQuiz()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Coba Lagi
+      </button>
+      <button class="btn-share" onclick="shareResult()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Bagikan
+      </button>
+    </div>
+    <div class="res-identity">Kelompok 1 · SMKS Wikrama Bogor · Kelas PPLG X-5 · PIPAS</div>
+  </div>
+</section>
+
+<footer>Kuis Ekonomi Kreatif · Kelompok 1 · SMKS Wikrama Bogor · PPLG X-5 · PIPAS</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

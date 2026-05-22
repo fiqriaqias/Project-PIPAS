@@ -164,3 +164,115 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
+
+/* System Nyawa */
+
+const MAX_LIVES = 3;
+let livesLeft = MAX_LIVES;
+
+// Sisipkan baris nyawa ke dalam quiz section setelah prog-track
+function injectLivesRow() {
+  if (document.getElementById('lives-row')) return;
+  const row = document.createElement('div');
+  row.className = 'lives-row';
+  row.id = 'lives-row';
+  row.innerHTML = renderHearts(livesLeft) + '<span class="lives-label" id="lives-label">nyawa</span>';
+  const track = document.querySelector('.prog-track');
+  track.insertAdjacentElement('afterend', row);
+}
+
+function renderHearts(count) {
+  let html = '';
+  for (let i = 0; i < MAX_LIVES; i++) {
+    const lost = i >= count ? ' lost' : '';
+    html += `<span class="life-icon${lost}" id="life-${i}">❤️</span>`;
+  }
+  return html;
+}
+
+function updateLivesDisplay() {
+  const row = document.getElementById('lives-row');
+  if (!row) return;
+  for (let i = 0; i < MAX_LIVES; i++) {
+    const el = document.getElementById('life-' + i);
+    if (!el) continue;
+    if (i >= livesLeft) {
+      el.classList.add('lost');
+    } else {
+      el.classList.remove('lost');
+    }
+  }
+  const label = document.getElementById('lives-label');
+  if (label) label.textContent = livesLeft + ' nyawa';
+}
+
+function loseLife() {
+  if (livesLeft <= 0) return;
+  const idx = livesLeft - 1;
+  const el = document.getElementById('life-' + idx);
+  if (el) {
+    el.classList.add('shake');
+    setTimeout(() => {
+      el.classList.remove('shake');
+      el.classList.add('lost');
+    }, 500);
+  }
+  livesLeft--;
+  const label = document.getElementById('lives-label');
+  if (label) setTimeout(() => { label.textContent = livesLeft + ' nyawa'; }, 200);
+  if (livesLeft <= 0) {
+    setTimeout(triggerGameOver, 700);
+  }
+}
+
+function triggerGameOver() {
+  const optionsEl = document.getElementById('options');
+  const feedbackEl = document.getElementById('feedback');
+  feedbackEl.className = 'feedback';
+  optionsEl.innerHTML = '';
+
+  const banner = document.createElement('div');
+  banner.className = 'game-over-banner';
+  banner.innerHTML = `
+    <div class="go-emoji">💔</div>
+    <div class="go-title">Nyawa Habis!</div>
+    <div class="go-desc">Skor kamu: ${score} / ${shuffled.length} soal. Coba lagi ya!</div>
+  `;
+  optionsEl.insertAdjacentElement('afterend', banner);
+
+  const bnext = document.getElementById('btn-next');
+  bnext.className = 'btn-next show';
+  bnext.innerHTML = 'Lihat Hasil <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+  bnext.onclick = showResult;
+}
+
+// Override pick() — tambahkan loseLife() saat salah
+const _origPick = pick;
+window.pick = function(idx) {
+  if (answered) return;
+  const s = shuffled[cur];
+  _origPick(idx);
+  if (idx !== s.ansIdx) {
+    loseLife();
+  }
+};
+
+// Override startQuiz() — reset nyawa
+const _origStart = startQuiz;
+window.startQuiz = function() {
+  livesLeft = MAX_LIVES;
+  _origStart();
+  injectLivesRow();
+  updateLivesDisplay();
+};
+
+// Override resetQuiz() — reset nyawa
+const _origReset = resetQuiz;
+window.resetQuiz = function() {
+  livesLeft = MAX_LIVES;
+  const banner = document.querySelector('.game-over-banner');
+  if (banner) banner.remove();
+  _origReset();
+  injectLivesRow();
+  updateLivesDisplay();
+};
